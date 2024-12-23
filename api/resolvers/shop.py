@@ -21,8 +21,7 @@ def resolve_renter(root, info: GraphQLResolveInfo, renter_id):
 
 
 @query.field("renters")
-def resolve_renters(root, info: GraphQLResolveInfo, id):
-    assert info.context["request"].user.is_authenticated, "User must be authenticated"
+def resolve_renters(root, info: GraphQLResolveInfo):
     return Renter.objects.all()
 
 
