@@ -1,0 +1,7 @@
+{% load get_key %}
+<pre>
+{% for visible_date in visible_dates %}
+  {{ visible_date }}<br/>
+  {{ calendar_contents|get_key:visible_date }}
+{% endfor %}
+</pre>
