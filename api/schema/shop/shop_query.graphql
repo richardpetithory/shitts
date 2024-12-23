@@ -1,0 +1,4 @@
+extend type Query {
+    renter(renter_id: Int!): Renter! @isAuthenticated
+    renters: [Renter!]! @isAuthenticated
+}

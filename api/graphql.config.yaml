@@ -1,0 +1,6 @@
+schema: schema.graphql
+documents: '**/*.graphql'
+include: '**/*.graphql'
+extensions:
+  endpoints:
+    default: http://localhost:8000/graphql/
