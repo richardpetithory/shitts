@@ -1,4 +1,5 @@
 extend type Query {
     renter(renter_id: Int!): Renter!
     renters: [Renter!]!
+    rentStats: RentStats!
 }

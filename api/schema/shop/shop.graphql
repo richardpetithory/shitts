@@ -2,3 +2,21 @@ type Renter {
     id: Int!
     name: String!
 }
+
+type RentStat {
+    renter: Renter
+    storage: Int
+    shop: Int
+    total: Int
+    paid: Int
+}
+
+type RentStatsCalendarContent {
+    date: Date!
+    values: [RentStat!]
+}
+
+type RentStats {
+    visible_dates: [Date!]!
+    calendar_contents: [RentStatsCalendarContent!]!
+}

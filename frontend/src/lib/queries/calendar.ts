@@ -26,3 +26,42 @@ export const GQL_RENTERS_QUERY = gql`
     }
   }
 `;
+
+export interface RentStat {
+  renter: Renter;
+  storage: number;
+  shop: number;
+  total: number;
+  paid: number;
+}
+
+export interface RentStatsCalendarContent {
+  date: Date;
+  values: RentStat[];
+}
+
+export interface RentStatsResponse {
+  visible_dates: Date[];
+  calendar_contents: RentStatsCalendarContent[];
+}
+
+export const GQL_RENT_STATS = gql`
+  query rentStats {
+    rentStats {
+      visible_dates
+      calendar_contents {
+        date
+        values {
+          renter {
+            id
+            name
+          }
+          storage
+          shop
+          total
+          paid
+        }
+      }
+    }
+  }
+`;
