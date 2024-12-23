@@ -1,7 +1,15 @@
 {% load get_key %}
-<pre>
 {% for visible_date in visible_dates %}
-  {{ visible_date }}<br/>
-  {{ calendar_contents|get_key:visible_date }}
+  <h2>{{ visible_date }}</h2>
+  <ul>
+    {% for renter_info in calendar_contents|get_key:visible_date %}
+      <li>
+        {{ renter_info.renter.name }} owed
+        ${{ renter_info.shop }} for shop access,
+        ${{ renter_info.storage }} for storage,
+        and paid ${{ renter_info.paid }}
+      </li>
+    {% endfor %}
+  </ul>
 {% endfor %}
-</pre>
+

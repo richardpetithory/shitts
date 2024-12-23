@@ -54,7 +54,7 @@ class RentCost(RangedModel):
     cost = models.IntegerField(default=0, null=False, blank=False)
 
     def __str__(self):
-        return f"{self.key} @ {self.cost} from {self.effective_start_date} to {self.effective_end_date}"
+        return f"{self.key.capitalize()} @ ${self.cost} from {self.effective_start_date} to {self.effective_end_date}"
 
 
 class Renter(models.Model):
