@@ -1,37 +1,128 @@
-# chat_project/api/resolvers.py
-
-import uuid
 from ariadne import QueryType
-from graphql import GraphQLResolveInfo
 
-# from django.contrib import auth
 from shop.models import Renter
-
 
 query = QueryType()
 
-# User = auth.get_user_model()
-
 
 @query.field("renter")
-def resolve_renter(root, info: GraphQLResolveInfo, renter_id):
+def resolve_renter(*_, renter_id):
     renter = Renter.objects.filter(id=renter_id)
     assert renter.exists(), "Renter must've been instantiated"
     return renter.get()
 
 
 @query.field("renters")
-def resolve_renters(root, info: GraphQLResolveInfo):
+def resolve_renters():
     return Renter.objects.all()
 
 
-# @query.field("user")
-# def resolve_user(root, info):
-#     assert info.context["request"].user.is_authenticated, "User must be authenticated"
-#     return info.context["request"].user
 #
 #
-# @query.field("users")
-# def resolve_users(root, info):
-#     assert info.context["request"].user.is_authenticated, "User must be authenticated"
-#     return User.objects.all()
+# @query.field("rentStats")
+# def rent_due(root, info: GraphQLResolveInfo):
+#     search_start = datetime.date(2023, 1, 1)
+#     search_end = datetime.datetime.now()
+#
+#     renter_range_for_range = list(
+#         RenterRange.objects.filter(
+#             effective_start_date__lte=search_end, effective_end_date__gte=search_start
+#         ).order_by("effective_start_date", "renter__name")
+#     )
+#
+#     visible_dates = [
+#         date.date() for date in rrule(MONTHLY, dtstart=search_start, until=search_end)
+#     ]
+#
+#     ###############################################################
+#     # Shop Rent Costs
+#
+#     shop_rent_cost_records = list(
+#         RentCost.objects.filter(
+#             key=RentTypes.SHOP,
+#             effective_start_date__lte=search_end,
+#             effective_end_date__gte=search_start,
+#         )
+#     )
+#
+#     shop_rent_cost_by_date = {
+#         this_date: sum(
+#             rate.cost
+#             for rate in shop_rent_cost_records
+#             if rate.effective_start_date <= this_date <= rate.effective_end_date
+#         )
+#         for this_date in visible_dates
+#     }
+#
+#     ###############################################################
+#     # Storage Rent Costs
+#
+#     storage_rent_cost_records = list(
+#         RentCost.objects.filter(
+#             key=RentTypes.STORAGE,
+#             effective_start_date__lte=search_end,
+#             effective_end_date__gte=search_start,
+#         )
+#     )
+#
+#     storage_rent_cost_by_date = {
+#         this_date: sum(
+#             rate.cost
+#             for rate in storage_rent_cost_records
+#             if rate.effective_start_date <= this_date <= rate.effective_end_date
+#         )
+#         for this_date in visible_dates
+#     }
+#
+#     ###############################################################
+#     # Rent Paid
+#
+#     rent_paid_records = {
+#         date_paid: list(rents_paid)
+#         for date_paid, rents_paid in itertools.groupby(
+#             RentPaid.objects.filter(
+#                 date_paid__gte=search_start, date_paid__lte=search_end
+#             ),
+#             lambda x: x.effective_date_paid,
+#         )
+#     }
+#
+#     rents_paid = {
+#         this_date: {
+#             renter: sum(rp.amount_paid for rp in rent_paid)
+#             for renter, rent_paid in itertools.groupby(
+#                 rent_paid_records.get(this_date, []), lambda x: x.renter
+#             )
+#         }
+#         for this_date in visible_dates
+#     }
+#
+#     ###############################################################
+#     # Merge it all
+#
+#     calendar_contents = {
+#         this_date: [
+#             {
+#                 "renter": renter_range.renter,
+#                 "storage": storage_rent_cost_by_date[this_date],
+#                 "shop": shop_rent_cost_by_date[this_date] if renter_range.access else 0,
+#                 "total": (
+#                     (shop_rent_cost_by_date[this_date] if renter_range.access else 0)
+#                     + storage_rent_cost_by_date[this_date]
+#                 ),
+#                 "paid": (rents_paid[this_date].get(renter_range.renter, 0)),
+#             }
+#             for renter_range in renter_range_for_range
+#             if (
+#                 renter_range.effective_start_date
+#                 <= this_date
+#                 <= renter_range.effective_end_date
+#             )
+#         ]
+#         for this_date in visible_dates
+#     }
+#
+#     return {
+#         "visible_dates": visible_dates,
+#         "calendar_contents": calendar_contents,
+#     }

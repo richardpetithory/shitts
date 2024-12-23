@@ -1,18 +1,23 @@
+import {GQL_RENTER_QUERY, RenterQueryResponse} from "@/lib/queries/calendar";
 import {useQuery} from "@apollo/client";
-import {GQL_RENTERS_QUERY, RentersQueryResponse} from "../../lib/queries/calendar.ts";
 
 export const CalendarPage = () => {
-  const {data} = useQuery<RentersQueryResponse>(GQL_RENTERS_QUERY, {
-    variables: {},
+  const {data} = useQuery<RenterQueryResponse>(GQL_RENTER_QUERY, {
+    variables: {
+      renterId: 1,
+    },
   });
 
   if (!data) return null;
 
+  console.log(data);
+
   return (
     <div>
-      {data.renters.map((renter) => (
-        <div key={renter.id}>{renter.name}</div>
-      ))}
+      {data.renter.name}
+      {/*{data.renters.map((renter) => (*/}
+      {/*  <div key={renter.id}>{renter.name}</div>*/}
+      {/*))}*/}
     </div>
   );
 };
