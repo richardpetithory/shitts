@@ -41,8 +41,10 @@ export interface RentStatsCalendarContent {
 }
 
 export interface RentStatsResponse {
-  visible_dates: Date[];
-  calendar_contents: RentStatsCalendarContent[];
+  rentStats: {
+    visible_dates: Date[];
+    calendar_contents: RentStatsCalendarContent[];
+  };
 }
 
 export const GQL_RENT_STATS = gql`

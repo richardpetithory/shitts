@@ -100,31 +100,6 @@ def rent_due(*_):
         for this_date in visible_dates
     }
 
-    ###############################################################
-    # Merge it all
-
-    # calendar_contents = {
-    #     this_date: [
-    #         {
-    #             "renter": renter_range.renter,
-    #             "storage": storage_rent_cost_by_date[this_date],
-    #             "shop": shop_rent_cost_by_date[this_date] if renter_range.access else 0,
-    #             "total": (
-    #                 (shop_rent_cost_by_date[this_date] if renter_range.access else 0)
-    #                 + storage_rent_cost_by_date[this_date]
-    #             ),
-    #             "paid": (rents_paid[this_date].get(renter_range.renter, 0)),
-    #         }
-    #         for renter_range in renter_range_for_range
-    #         if (
-    #             renter_range.effective_start_date
-    #             <= this_date
-    #             <= renter_range.effective_end_date
-    #         )
-    #     ]
-    #     for this_date in visible_dates
-    # }
-
     calendar_contents = [
         {
             "date": this_date,
