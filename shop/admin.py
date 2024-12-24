@@ -11,14 +11,14 @@ admin.site.register(RentCost, RentCostAdmin)
 
 
 class RenterAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("name",)
 
 
 admin.site.register(Renter, RenterAdmin)
 
 
 class RenterRangeAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("start_date", "renter__name")
 
 
 admin.site.register(RenterRange, RenterRangeAdmin)
@@ -39,7 +39,7 @@ admin.site.register(StorageRange, StorageRangeAdmin)
 
 
 class RentPaidAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("-id",)
 
 
 admin.site.register(RentPaid, RentPaidAdmin)

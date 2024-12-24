@@ -40,6 +40,7 @@ export const GQL_RENT_STATS = gql`
       visible_dates
       calendar_contents {
         date
+        rent
         values {
           renter {
             id

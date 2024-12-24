@@ -25,7 +25,7 @@ def resolve_renters(*_):
 
 @query.field("rentStats")
 def rent_due(*_):
-    search_start = datetime.date(2023, 1, 1)
+    search_start = datetime.date(2024, 7, 1)
     search_end = datetime.datetime.now()
 
     renter_range_for_range = list(
@@ -43,7 +43,7 @@ def rent_due(*_):
 
     shop_rent_cost_records = list(
         RentCost.objects.filter(
-            key=RentTypes.SHOP,
+            key=RentTypes.RENT,
             effective_start_date__lte=search_end,
             effective_end_date__gte=search_start,
         )
@@ -53,6 +53,26 @@ def rent_due(*_):
         this_date: sum(
             rate.cost
             for rate in shop_rent_cost_records
+            if rate.effective_start_date <= this_date <= rate.effective_end_date
+        )
+        for this_date in visible_dates
+    }
+
+    ###############################################################
+    # Shop Access Costs
+
+    shop_access_cost_records = list(
+        RentCost.objects.filter(
+            key=RentTypes.SHOP,
+            effective_start_date__lte=search_end,
+            effective_end_date__gte=search_start,
+        )
+    )
+
+    shop_access_cost_by_date = {
+        this_date: sum(
+            rate.cost
+            for rate in shop_access_cost_records
             if rate.effective_start_date <= this_date <= rate.effective_end_date
         )
         for this_date in visible_dates
@@ -85,13 +105,16 @@ def rent_due(*_):
         date_paid: list(rents_paid)
         for date_paid, rents_paid in itertools.groupby(
             RentPaid.objects.filter(
-                date_paid__gte=search_start, date_paid__lte=search_end
+                effective_date_paid__gte=search_start,
+                effective_date_paid__lte=search_end,
             ),
             lambda x: x.effective_date_paid,
         )
     }
 
-    rents_paid = {
+    # pprint(rent_paid_records)
+
+    rents_paid_by_date = {
         this_date: {
             renter: sum(rp.amount_paid for rp in rent_paid)
             for renter, rent_paid in itertools.groupby(
@@ -104,6 +127,7 @@ def rent_due(*_):
     calendar_contents = [
         {
             "date": this_date,
+            "rent": shop_rent_cost_by_date[this_date],
             "values": [
                 {
                     "renter": renter_range.renter,
@@ -112,9 +136,11 @@ def rent_due(*_):
                     * renter_range.bikes,
                     "access": renter_range.access,
                     "shop": (
-                        shop_rent_cost_by_date[this_date] if renter_range.access else 0
+                        shop_access_cost_by_date[this_date]
+                        if renter_range.access
+                        else 0
                     ),
-                    "paid": (rents_paid[this_date].get(renter_range.renter, 0)),
+                    "paid": (rents_paid_by_date[this_date].get(renter_range.renter, 0)),
                 }
                 for renter_range in renter_range_for_range
                 if (

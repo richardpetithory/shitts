@@ -14,5 +14,6 @@ export interface RentStat {
 
 export interface RentStatsCalendarContent {
   date: Date;
+  rent: number;
   values: RentStat[];
 }
