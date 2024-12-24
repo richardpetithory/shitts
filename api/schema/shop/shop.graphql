@@ -4,11 +4,12 @@ type Renter {
 }
 
 type RentStat {
-    renter: Renter
-    storage: Int
-    shop: Int
-    total: Int
-    paid: Int
+    renter: Renter!
+    storage: Int!
+    bikes: Int!
+    access: Boolean!
+    shop: Int!
+    paid: Int!
 }
 
 type RentStatsCalendarContent {

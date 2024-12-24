@@ -67,6 +67,7 @@ class Renter(models.Model):
 class RenterRange(RangedModel):
     renter = models.ForeignKey(to="shop.Renter", on_delete=models.CASCADE)
     access = models.BooleanField(null=False, blank=False, default=True)
+    bikes = None
 
     def __str__(self):
         return f"{self.renter.name} from {self.effective_start_date} to {self.effective_end_date}"

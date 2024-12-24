@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {Renter} from "../types/calendar.ts";
+import {Renter, RentStatsCalendarContent} from "../types/calendar.ts";
 
 export interface RenterQueryResponse {
   renter: Renter;
@@ -27,19 +27,6 @@ export const GQL_RENTERS_QUERY = gql`
   }
 `;
 
-export interface RentStat {
-  renter: Renter;
-  storage: number;
-  shop: number;
-  total: number;
-  paid: number;
-}
-
-export interface RentStatsCalendarContent {
-  date: Date;
-  values: RentStat[];
-}
-
 export interface RentStatsResponse {
   rentStats: {
     visible_dates: Date[];
@@ -58,9 +45,10 @@ export const GQL_RENT_STATS = gql`
             id
             name
           }
+          bikes
           storage
+          access
           shop
-          total
           paid
         }
       }

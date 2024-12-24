@@ -3,6 +3,7 @@ import itertools
 
 from ariadne import QueryType
 from dateutil.rrule import rrule, MONTHLY
+from django.db.models import Count
 
 from shop.models import Renter
 from shop.models import RenterRange, RentCost, RentTypes, RentPaid
@@ -28,9 +29,9 @@ def rent_due(*_):
     search_end = datetime.datetime.now()
 
     renter_range_for_range = list(
-        RenterRange.objects.filter(
+        RenterRange.objects.annotate(bikes=Count("renter__bike")).filter(
             effective_start_date__lte=search_end, effective_end_date__gte=search_start
-        ).order_by("effective_start_date", "renter__name")
+        )
     )
 
     visible_dates = [
@@ -106,17 +107,12 @@ def rent_due(*_):
             "values": [
                 {
                     "renter": renter_range.renter,
-                    "storage": storage_rent_cost_by_date[this_date],
+                    "bikes": renter_range.bikes,
+                    "storage": storage_rent_cost_by_date[this_date]
+                    * renter_range.bikes,
+                    "access": renter_range.access,
                     "shop": (
                         shop_rent_cost_by_date[this_date] if renter_range.access else 0
-                    ),
-                    "total": (
-                        (
-                            shop_rent_cost_by_date[this_date]
-                            if renter_range.access
-                            else 0
-                        )
-                        + storage_rent_cost_by_date[this_date]
                     ),
                     "paid": (rents_paid[this_date].get(renter_range.renter, 0)),
                 }
