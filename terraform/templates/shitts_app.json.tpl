@@ -1,7 +1,7 @@
 [
   {
     "name": "shitts-app",
-    "image": "${docker_image_url_django}",
+    "image": "${docker_image_url_shitts}",
     "essential": true,
     "cpu": 10,
     "memory": 512,
