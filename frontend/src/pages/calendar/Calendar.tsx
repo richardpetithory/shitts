@@ -1,5 +1,6 @@
 import {GQL_RENT_STATS, RentStatsResponse} from "@/lib/queries/calendar";
 import {useQuery} from "@apollo/client";
+import classNames from "classnames";
 import {sortBy, sum} from "lodash";
 import groupBy from "lodash/groupBy";
 import range from "lodash/range";
@@ -36,14 +37,14 @@ export const CalendarPage = () => {
             <tr key={date.toString()}>
               <td>{date.toString()}</td>
               <td key={date.toString()}>
-                <ul className="mb-0">
+                <ul className="mb-0 list-group">
                   {infoForDate.map((rentInfo) => {
                     const total = rentInfo.shop + rentInfo.storage;
 
                     const warningClass = rentInfo.paid < total ? "text-danger" : "";
 
                     return (
-                      <li className={warningClass}>
+                      <li className={classNames("list-group-item", warningClass)}>
                         <span className="p-1">
                           {rentInfo.renter.name} owed ${total} and paid ${rentInfo.paid}
                         </span>
@@ -59,10 +60,12 @@ export const CalendarPage = () => {
                       </li>
                     );
                   })}
+                  <li className="list-group-item">
+                    <strong>
+                      ${shopRent} - ${totalPaid} = ${shopRent - totalPaid}
+                    </strong>
+                  </li>
                 </ul>
-                <div>
-                  ${shopRent} - ${totalPaid} = ${shopRent - totalPaid}
-                </div>
               </td>
             </tr>
           );
