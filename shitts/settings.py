@@ -63,7 +63,8 @@ MIDDLEWARE = [
 CORS_URLS_REGEX = r"^/graphql/?$"
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "*",
+    "https://localhost:4000",
+    "https://shitts-app-prs5l.ondigitalocean.app",
 ]
 
 CORS_ALLOW_HEADERS = [
