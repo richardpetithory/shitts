@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 import sys
 from pathlib import Path
+from pprint import pprint
 
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
@@ -100,6 +101,8 @@ WSGI_APPLICATION = "shitts.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+pprint(os.environ)
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
