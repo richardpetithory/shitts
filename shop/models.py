@@ -13,19 +13,22 @@ class RangedModelManager(models.Manager):
             .get_queryset()
             .annotate(
                 effective_start_date=TruncMonth("start_date", output_field=DateField()),
-                effective_end_date=ExpressionWrapper(
-                    TruncMonth(
-                        ExpressionWrapper(
-                            TruncMonth(
-                                Coalesce(
-                                    F("end_date"), Cast(timezone.now(), DateField())
+                effective_end_date=TruncMonth(
+                    ExpressionWrapper(
+                        TruncMonth(
+                            ExpressionWrapper(
+                                TruncMonth(
+                                    Coalesce(
+                                        F("end_date"), Cast(timezone.now(), DateField())
+                                    )
                                 )
+                                + timedelta(days=32),
+                                output_field=DateField(),
                             )
-                            + timedelta(days=32),
-                            output_field=DateField(),
                         )
-                    )
-                    - timedelta(days=1),
+                        - timedelta(days=1),
+                        output_field=DateField(),
+                    ),
                     output_field=DateField(),
                 ),
             )
