@@ -2,6 +2,7 @@
   "name": "shitts",
   "type": "commonjs",
   "scripts": {
-    "postinstall": "cd frontend && npm install"
+    "postinstall": "cd frontend && npm install",
+    "build": "cd frontend && npm run build"
   }
 }
