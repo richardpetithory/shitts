@@ -3,4 +3,4 @@ documents: '**/*.graphql'
 include: '**/*.graphql'
 extensions:
   endpoints:
-    default: /graphql/
+    default: http://localhost:8000/graphql/
