@@ -10,7 +10,7 @@ if (import.meta.env.DEV) {
 const removeTypenameLink = removeTypenameFromVariables();
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:8000/graphql/",
+  uri: "/graphql/",
 });
 
 const client = new ApolloClient({

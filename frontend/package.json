@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "tsc": "tsc",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -14,8 +15,12 @@
     "bootstrap": "^5.3.3",
     "classnames": "2.5.1",
     "graphql": "^16.10.0",
+    "jquery": "^3.7.1",
     "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.46",
     "react": "^18.3.1",
+    "react-apexcharts": "^1.7.0",
     "react-bootstrap": "^2.10.7",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",

@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/lib/apolloclient.tsx","./src/lib/queries/calendar.ts","./src/lib/types/calendar.ts","./src/pages/calendar/calendar.tsx"],"version":"5.6.3"}
