@@ -25,7 +25,7 @@ admin.site.register(RenterRange, RenterRangeAdmin)
 
 
 class BikeAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("owner__name", "description")
 
 
 admin.site.register(Bike, BikeAdmin)
