@@ -88,7 +88,9 @@ class RenterRange(RangedModel):
 
 
 class Bike(models.Model):
-    owner = models.ForeignKey(to="shop.Renter", on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        to="shop.Renter", on_delete=models.CASCADE, related_name="bikes"
+    )
     description = models.CharField(null=False, blank=False, max_length=100)
 
     def __str__(self):

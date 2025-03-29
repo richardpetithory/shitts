@@ -32,7 +32,7 @@ admin.site.register(Bike, BikeAdmin)
 
 
 class StorageRangeAdmin(admin.ModelAdmin):
-    pass
+    ordering = ("bike__owner__name", "bike__description")
 
 
 admin.site.register(StorageRange, StorageRangeAdmin)

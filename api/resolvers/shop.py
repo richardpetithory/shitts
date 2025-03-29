@@ -3,9 +3,8 @@ import itertools
 
 from ariadne import QueryType
 from dateutil.rrule import rrule, MONTHLY
-from django.db.models import Count
 
-from shop.models import Renter
+from shop.models import Renter, StorageRange
 from shop.models import RenterRange, RentCost, RentTypes, RentPaid
 
 query = QueryType()
@@ -25,11 +24,11 @@ def resolve_renters(*_):
 
 @query.field("rentStats")
 def rent_due(*_):
-    search_start = datetime.date(2024, 7, 1)
     search_end = datetime.datetime.now()
+    search_start = (search_end - datetime.timedelta(days=365)).replace(day=1)
 
     renter_range_for_range = list(
-        RenterRange.objects.annotate(bikes=Count("renter__bike")).filter(
+        RenterRange.objects.filter(
             effective_start_date__lte=search_end, effective_end_date__gte=search_start
         )
     )
@@ -98,6 +97,22 @@ def rent_due(*_):
         for this_date in visible_dates
     }
 
+    # for this_date in visible_dates:
+    #     Renter.objects.annotate(bike_count=Count("storage_range__"))
+    #     storage = StorageRange.objects.filter(
+    #         effective_start_date__lte=this_date, effective_end_date__gte=this_date
+    #     )
+
+    # storage_rent_owed_by_date = {
+    #     this_date: {
+    #         storage.bike.owner: storage
+    #         for storage in StorageRange.objects.filter(
+    #             effective_start_date__lte=this_date, effective_end_date__gte=this_date
+    #         ).all()
+    #     }
+    #     for this_date in visible_dates
+    # }
+
     ###############################################################
     # Rent Paid
 
@@ -112,8 +127,6 @@ def rent_due(*_):
         )
     }
 
-    # pprint(rent_paid_records)
-
     rents_paid_by_date = {
         this_date: {
             renter: sum(rp.amount_paid for rp in rent_paid)
@@ -124,6 +137,14 @@ def rent_due(*_):
         for this_date in visible_dates
     }
 
+    def bike_count(this_date, renter):
+        x = StorageRange.objects.filter(
+            effective_start_date__lte=this_date,
+            effective_end_date__gte=this_date,
+            bike__owner=renter,
+        )
+        return x.count()
+
     calendar_contents = [
         {
             "date": this_date,
@@ -131,9 +152,9 @@ def rent_due(*_):
             "values": [
                 {
                     "renter": renter_range.renter,
-                    "bikes": renter_range.bikes,
+                    "bikes": bike_count(this_date, renter_range.renter),
                     "storage": storage_rent_cost_by_date[this_date]
-                    * renter_range.bikes,
+                    * bike_count(this_date, renter_range.renter),
                     "access": renter_range.access,
                     "shop": (
                         shop_access_cost_by_date[this_date]
