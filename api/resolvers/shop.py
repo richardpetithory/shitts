@@ -146,7 +146,11 @@ def rent_due(*_):
             bike__owner=renter,
         )
         return [
-            {"renter": renter, "description": storage_range.bike.description}
+            {
+                "id": storage_range.bike.id,
+                "renter": renter,
+                "description": storage_range.bike.description,
+            }
             for storage_range in storage_ranges
         ]
 

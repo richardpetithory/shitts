@@ -1,4 +1,5 @@
 type Bike {
+    id: Int!
     description: String
 }
 

@@ -47,6 +47,7 @@ export const GQL_RENT_STATS = gql`
             name
           }
           bikes {
+            id
             description
           }
           storage
