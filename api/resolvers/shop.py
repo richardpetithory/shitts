@@ -37,6 +37,8 @@ def rent_due(*_):
         date.date() for date in rrule(MONTHLY, dtstart=search_start, until=search_end)
     ]
 
+    visible_dates.reverse()
+
     ###############################################################
     # Shop Rent Costs
 
