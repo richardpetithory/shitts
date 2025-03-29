@@ -46,7 +46,9 @@ export const GQL_RENT_STATS = gql`
             id
             name
           }
-          bikes
+          bikes {
+            description
+          }
           storage
           access
           shop

@@ -1,3 +1,7 @@
+type Bike {
+    description: String
+}
+
 type Renter {
     id: Int!
     name: String!
@@ -6,7 +10,7 @@ type Renter {
 type RentStat {
     renter: Renter!
     storage: Int!
-    bikes: Int!
+    bikes: [Bike!]!
     access: Boolean!
     shop: Int!
     paid: Int!
@@ -15,7 +19,7 @@ type RentStat {
 type RentStatsCalendarContent {
     date: Date!
     rent: Int!
-    values: [RentStat!]
+    values: [RentStat!]!
 }
 
 type RentStats {

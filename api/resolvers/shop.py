@@ -139,13 +139,16 @@ def rent_due(*_):
         for this_date in visible_dates
     }
 
-    def bike_count(this_date, renter):
-        x = StorageRange.objects.filter(
+    def get_bikes(this_date, renter):
+        storage_ranges = StorageRange.objects.filter(
             effective_start_date__lte=this_date,
             effective_end_date__gte=this_date,
             bike__owner=renter,
         )
-        return x.count()
+        return [
+            {"renter": renter, "description": storage_range.bike.description}
+            for storage_range in storage_ranges
+        ]
 
     calendar_contents = [
         {
@@ -154,9 +157,9 @@ def rent_due(*_):
             "values": [
                 {
                     "renter": renter_range.renter,
-                    "bikes": bike_count(this_date, renter_range.renter),
+                    "bikes": get_bikes(this_date, renter_range.renter),
                     "storage": storage_rent_cost_by_date[this_date]
-                    * bike_count(this_date, renter_range.renter),
+                    * len(get_bikes(this_date, renter_range.renter)),
                     "access": renter_range.access,
                     "shop": (
                         shop_access_cost_by_date[this_date]

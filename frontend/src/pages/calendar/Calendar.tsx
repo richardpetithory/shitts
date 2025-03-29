@@ -39,7 +39,7 @@ export const CalendarPage = () => {
               <td key={date.toString()}>
                 <ul className="mb-0 list-group">
                   {infoForDate.map((rentInfo) => {
-                    const total = rentInfo.shop + rentInfo.storage;
+                    const total = 0; //rentInfo.shop + rentInfo.storage;
 
                     const warningClass = rentInfo.paid < total ? "text-danger" : "";
 
