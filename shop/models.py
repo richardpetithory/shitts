@@ -153,6 +153,4 @@ class RentPaid(models.Model):
         verbose_name_plural = "Rent Paid"
 
     def __str__(self):
-        return (
-            f"{self.renter.name} paid ${self.amount_paid} on {self.effective_date_paid}"
-        )
+        return f"{self.renter.name} paid ${self.amount_paid} on {self.date_paid}"
