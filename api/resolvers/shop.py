@@ -25,7 +25,7 @@ def resolve_renters(*_):
 @query.field("rentStats")
 def rent_due(*_):
     search_end = datetime.datetime.now()
-    search_start = (search_end - datetime.timedelta(days=365)).replace(day=1)
+    search_start = (search_end - datetime.timedelta(days=120)).replace(day=1)
 
     renter_range_for_range = list(
         RenterRange.objects.filter(
